@@ -4,11 +4,13 @@ import tkinter.ttk
 import tkinter.messagebox
 import sqlite3
 
+
 class Database:
     def __init__(self):
         self.dbConnection = sqlite3.connect("dbFile.db")
         self.dbCursor = self.dbConnection.cursor()
         self.dbCursor.execute("CREATE TABLE IF NOT EXISTS patient_info (id PRIMARYKEY text, fName text, lName text, dob text, mob text, yob text, gender text, address text, phone text, email text, bloodGroup text, history text, doctor text)")
+
 
     def __del__(self):
         self.dbCursor.close()
@@ -38,7 +40,7 @@ class Database:
 
 class Values:
     def Validate(self, id, fName, lName, phone, email, history, doctor):
-        if not (id.isdigit() and (len(id) == 9)):
+        if not (id.isdigit() and (len(id) == 3)):
             return "id"
         elif not (fName.isalpha()):
             return "fName"
@@ -60,6 +62,7 @@ class InsertWindow:
         self.window = tkinter.Tk()
         self.window.wm_title("Insert data")
 
+
         # Initializing all the variables
         self.id = tkinter.StringVar()
         self.fName = tkinter.StringVar()
@@ -69,6 +72,7 @@ class InsertWindow:
         self.email = tkinter.StringVar()
         self.history = tkinter.StringVar()
         self.doctor = tkinter.StringVar()
+        self.dateofentry = tkinter.StringVar()
 
         self.genderList = ["Male", "Female", "Transgender", "Other"]
         self.dateList = list(range(1, 32))
@@ -90,6 +94,7 @@ class InsertWindow:
         tkinter.Label(self.window, text = "Blood Group",  width = 25).grid(pady = 5, column = 1, row = 11)
         tkinter.Label(self.window, text = "Patient History",  width = 25).grid(pady = 5, column = 1, row = 12)
         tkinter.Label(self.window, text = "Doctor",  width = 25).grid(pady = 5, column = 1, row = 13)
+        tkinter.Label(self.window, text="Date of Entry", width=25).grid(pady=5, column=1, row=14)
 
         # Fields
         # Entry widgets
@@ -101,6 +106,7 @@ class InsertWindow:
         self.emailEntry = tkinter.Entry(self.window,  width = 25, textvariable = self.email)
         self.historyEntry = tkinter.Entry(self.window,  width = 25, textvariable = self.history)
         self.doctorEntry = tkinter.Entry(self.window,  width = 25, textvariable = self.doctor)
+        self.dateofentryEntry = tkinter.Entry(self.window, width=25, textvariable=self.dateofentry)
 
         self.idEntry.grid(pady = 5, column = 3, row = 1)
         self.fNameEntry.grid(pady = 5, column = 3, row = 2)
@@ -110,6 +116,7 @@ class InsertWindow:
         self.emailEntry.grid(pady = 5, column = 3, row = 10)
         self.historyEntry.grid(pady = 5, column = 3, row = 12)
         self.doctorEntry.grid(pady = 5, column = 3, row = 13)
+        self.dateofentryEntry.grid(pady=5, column=3, row=14)
 
         # Combobox widgets
         self.dobBox = tkinter.ttk.Combobox(self.window, values = self.dateList, width = 20)
@@ -125,9 +132,9 @@ class InsertWindow:
         self.bloodGroupBox.grid(pady = 5, column = 3, row = 11)
 
         # Button widgets
-        tkinter.Button(self.window, width = 20, text = "Insert", command = self.Insert).grid(pady = 15, padx = 5, column = 1, row = 14)
-        tkinter.Button(self.window, width = 20, text = "Reset", command = self.Reset).grid(pady = 15, padx = 5, column = 2, row = 14)
-        tkinter.Button(self.window, width = 20, text = "Close", command = self.window.destroy).grid(pady = 15, padx = 5, column = 3, row = 14)
+        tkinter.Button(self.window, width = 20, text = "Insert", command = self.Insert).grid(pady = 15, padx = 5, column = 1, row = 16)
+        tkinter.Button(self.window, width = 20, text = "Reset", command = self.Reset).grid(pady = 15, padx = 5, column = 2, row = 16)
+        tkinter.Button(self.window, width = 20, text = "Close", command = self.window.destroy).grid(pady = 15, padx = 5, column = 3, row = 16)
 
         self.window.mainloop()
 
@@ -156,6 +163,7 @@ class InsertWindow:
         self.bloodGroupBox.set("")
         self.historyEntry.delete(0, tkinter.END)
         self.doctorEntry.delete(0, tkinter.END)
+        self.dateofentryEntry.delete(0, tkinter.END)
     
 class UpdateWindow:
     def __init__(self, id):
@@ -280,7 +288,7 @@ class DatabaseView:
         self.databaseView = tkinter.ttk.Treeview(self.databaseViewWindow)
         self.databaseView.grid(pady = 5, column = 1, row = 2)
         self.databaseView["show"] = "headings"
-        self.databaseView["columns"] = ("id", "fName", "lName", "dob", "mob", "yob", "gender", "address", "phone", "email", "bloodGroup", "history", "doctor")
+        self.databaseView["columns"] = ("id", "fName", "lName", "dob", "mob", "yob", "gender", "address", "phone", "email", "bloodGroup", "history", "doctor","Date of Entry")
 
         # Treeview column headings
         self.databaseView.heading("id", text = "ID")
@@ -296,6 +304,7 @@ class DatabaseView:
         self.databaseView.heading("bloodGroup", text = "Blood Group")
         self.databaseView.heading("history", text = "History")
         self.databaseView.heading("doctor", text = "Doctor")
+        self.databaseView.heading("dateofentry", text="Date of Entry")
 
         # Treeview columns
         self.databaseView.column("id", width = 40)
@@ -311,6 +320,7 @@ class DatabaseView:
         self.databaseView.column("bloodGroup", width = 100)
         self.databaseView.column("history", width = 100)
         self.databaseView.column("doctor", width = 100)
+        self.databaseView.column("Date of Entry", width=100)
 
         for record in data:
             self.databaseView.insert('', 'end', values=(record))
@@ -355,9 +365,9 @@ class SearchDeleteWindow:
 class HomePage:
     def __init__(self):
         self.homePageWindow = tkinter.Tk()
-        self.homePageWindow.wm_title("Pandemic Quarantine Information System")
+        self.homePageWindow.wm_title("DIGITAL QUARANTINE REGISTER (DQAR)")
 
-        tkinter.Label(self.homePageWindow, text = "Home Page",  width = 100).grid(pady = 20, column = 1, row = 1)
+        tkinter.Label(self.homePageWindow, text = "DIGITAL QUARANTINE REGISTER DASHBOARD",  width = 100).grid(pady = 20, column = 1, row = 1)
 
         tkinter.Button(self.homePageWindow, width = 20, text = "Insert", command = self.Insert).grid(pady = 15, column = 1, row = 2)
         tkinter.Button(self.homePageWindow, width = 20, text = "Update", command = self.Update).grid(pady = 15, column = 1, row = 3)
