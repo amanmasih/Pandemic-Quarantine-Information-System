@@ -73,6 +73,7 @@ class InsertWindow:
         self.window.wm_title("Insert RECORDS")
 
 
+
         # Initializing all the variables
         self.id = tkinter.StringVar()
         self.fName = tkinter.StringVar()
@@ -407,13 +408,14 @@ class HomePage:
     def __init__(self):
         self.homePageWindow = tkinter.Tk()
         self.homePageWindow.wm_title("DIGITAL QUARANTINE REGISTER (DQAR)")
-        root = tkinter.Tk()
-        frame1 = tkinter.Frame(root)
-        frame1.pack(side=tkinter.TOP, fill=tkinter.X)
-        photo1 = tkinter.PhotoImage(file="covid1.gif")
 
-        image1 = Image.open("covid1.gif")
-        photo1 = ImageTk.PhotoImage(image1)
+
+        background_image = tkinter.PhotoImage(file="covid1.gif")
+        background_label = tkinter.Label(image=background_image)
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        background_label.image = background_image
+
+
 
 
 
@@ -421,10 +423,10 @@ class HomePage:
                                                                                                          column=1,
                                                                                                          row=1)
         tkinter.Button(self.homePageWindow, width=20, text="Insert",bg='pink', command=self.Insert).grid(pady=15, column=1, row=2)
-        tkinter.Button(self.homePageWindow, width=20, text="Update",bg='blue',  command=self.Update).grid(pady=15, column=1, row=3)
-        tkinter.Button(self.homePageWindow, width=20, text="Search",bg='green',  command=self.Search).grid(pady=15, column=1, row=4)
+        tkinter.Button(self.homePageWindow, width=20, text="Update",bg='light blue',  command=self.Update).grid(pady=15, column=1, row=3)
+        tkinter.Button(self.homePageWindow, width=20, text="Search",bg='light green',  command=self.Search).grid(pady=15, column=1, row=4)
         tkinter.Button(self.homePageWindow, width=20, text="Delete",bg='red',  command=self.Delete).grid(pady=15, column=1, row=5)
-        tkinter.Button(self.homePageWindow, width=20, text="Display",bg='lightblue',  command=self.Display).grid(pady=15, column=1,
+        tkinter.Button(self.homePageWindow, width=20, text="Display",bg='yellow',  command=self.Display).grid(pady=15, column=1,
                                                                                                  row=6)
         tkinter.Button(self.homePageWindow, width=20, text="Exit",bg='purple',  command=self.homePageWindow.destroy).grid(pady=15,
                                                                                                              column=1,
@@ -434,15 +436,15 @@ class HomePage:
 
     def Insert(self):
         self.insertWindow = InsertWindow()
-        #self.canvas = Canvas(width=580, height=768, bg='blue')
-        #self.canvas.pack()
-        #self.photo = PhotoImage(file='covid.png')
-        #self.canvas.create_image(-20, -20, image=self.photo, anchor=NW)
+
+
 
 
     def Update(self):
         self.updateIDWindow = tkinter.Tk()
         self.updateIDWindow.wm_title("Update data")
+
+
 
         # Initializing all the variables
         self.id = tkinter.StringVar()
