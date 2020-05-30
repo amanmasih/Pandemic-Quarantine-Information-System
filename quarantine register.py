@@ -12,22 +12,22 @@ class Database:
         self.dbConnection = sqlite3.connect("dbFile.db")
         self.dbCursor = self.dbConnection.cursor()
         self.dbCursor.execute \
-            ("CREATE TABLE IF NOT EXISTS patient_info (id PRIMARYKEY text, fName text, lName text, dob text, symptoms text, yob text, gender text, address text, phone text, email text, bloodGroup text, history text, doctor text,dateofentry text)")
+            ("CREATE TABLE IF NOT EXISTS patient_info (id PRIMARYKEY text, fName text, lName text, dob text, symptoms text, yob text, gender text, address text, phone text, email text, bloodGroup text, dateof_admit text, doctor text)")
 
 
     def __del__(self):
         self.dbCursor.close()
         self.dbConnection.close()
 
-    def Insert(self, id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor, dateofentry):
-        self.dbCursor.execute("INSERT INTO patient_info VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
-        (id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor,dateofentry))
+    def Insert(self, id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, dateof_admit, doctor, ):
+        self.dbCursor.execute("INSERT INTO patient_info VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, dateof_admit, doctor))
         self.dbConnection.commit()
 
-    def Update(self, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor, id):
+    def Update(self, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, dateof_admit, doctor, id):
         self.dbCursor.execute(
-            "UPDATE patient_info SET fName = ?, lName = ?, dob = ?, symptoms = ?, yob = ?, gender = ?, address = ?, phone = ?, email = ?, bloodGroup = ?, history = ?, doctor = ? WHERE id = ?",
-            (fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor, id))
+            "UPDATE patient_info SET fName = ?, lName = ?, dob = ?, symptoms = ?, yob = ?, gender = ?, address = ?, phone = ?, email = ?, bloodGroup = ?, dateof_admit = ?, doctor = ? WHERE id = ?",
+            (fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, dateof_admit, doctor, id))
         self.dbConnection.commit()
 
     def Search(self, id):
@@ -46,25 +46,23 @@ class Database:
 
 
 class Values:
-    def Validate(self, id, fName, lName,dob, phone, email, history, doctor, dateofentry):
-        if not (id.isdigit() and (len(id) == 5)):
+    def Validate(self, id, fName, lName,dob, phone, email, dateof_admit, doctor, ):
+        if not (id.isdigit()):
             return "id"
         elif not (fName.isalpha()):
             return "fName"
         elif not (lName.isalpha()):
             return "lName"
-        elif not (dob.isdigit() and (len(dob) == 10)):
+        elif not (dob.isdigit()):
             return "dob"
         elif not (phone.isdigit() and (len(phone) == 10)):
             return "phone"
         elif not (email.count("@") == 1 and email.count(".") > 0):
             return "email"
-        elif not (history.isalpha()):
-            return "history"
+        elif not (dateof_admit.isdigit()):
+            return "dateof_admit"
         elif not (doctor.isalpha()):
             return "doctor"
-        elif not (dateofentry.isalpha()):
-            return "dateofentry"
         else:
             return "SUCCESS"
 
@@ -83,9 +81,9 @@ class InsertWindow:
         self.address = tkinter.StringVar()
         self.phone = tkinter.StringVar()
         self.email = tkinter.StringVar()
-        self.history = tkinter.StringVar()
+        self.dateof_admit = tkinter.StringVar()
         self.doctor = tkinter.StringVar()
-        self.dateofentry = tkinter.StringVar()
+
 
         self.genderList = ["Male", "Female", "Transgender", "Other"]
         self.dateList = list(range(1, 32))
@@ -108,9 +106,9 @@ class InsertWindow:
         tkinter.Label(self.window, text="Phone Number", width=25).grid(pady=5, column=1, row=9)
         tkinter.Label(self.window, text="Email ID", width=25).grid(pady=5, column=1, row=10)
         tkinter.Label(self.window, text="Blood Group", width=25).grid(pady=5, column=1, row=11)
-        tkinter.Label(self.window, text="Patient History", width=25).grid(pady=5, column=1, row=12)
+        tkinter.Label(self.window, text="Date of Admit", width=25).grid(pady=5, column=1, row=12)
         tkinter.Label(self.window, text="Doctor", width=25).grid(pady=5, column=1, row=13)
-        tkinter.Label(self.window, text="Date of Entry", width=25).grid(pady=5, column=1, row=14)
+
 
         # Fields
         # Entry widgets
@@ -121,9 +119,9 @@ class InsertWindow:
         self.addressEntry = tkinter.Entry(self.window, width=25, textvariable=self.address)
         self.phoneEntry = tkinter.Entry(self.window, width=25, textvariable=self.phone)
         self.emailEntry = tkinter.Entry(self.window, width=25, textvariable=self.email)
-        self.historyEntry = tkinter.Entry(self.window, width=25, textvariable=self.history)
+        self.dateof_admitEntry = tkinter.Entry(self.window, width=25, textvariable=self.dateof_admit)
         self.doctorEntry = tkinter.Entry(self.window, width=25, textvariable=self.doctor)
-        self.dateofentryEntry = tkinter.Entry(self.window, width=25, textvariable=self.dateofentry)
+
 
         self.idEntry.grid(pady=5, column=3, row=1)
         self.fNameEntry.grid(pady=5, column=3, row=2)
@@ -132,9 +130,9 @@ class InsertWindow:
         self.addressEntry.grid(pady=5, column=3, row=8)
         self.phoneEntry.grid(pady=5, column=3, row=9)
         self.emailEntry.grid(pady=5, column=3, row=10)
-        self.historyEntry.grid(pady=5, column=3, row=12)
+        self.dateof_admitEntry.grid(pady=5, column=3, row=12)
         self.doctorEntry.grid(pady=5, column=3, row=13)
-        self.dateofentryEntry.grid(pady=5, column=3, row=14)
+
 
         # Combobox widgets
         self.mobBox = tkinter.ttk.Combobox(self.window, values=self.SymptomsList, width=20)
@@ -161,13 +159,13 @@ class InsertWindow:
         self.values = Values()
         self.database = Database()
         self.test = self.values.Validate(self.idEntry.get(), self.fNameEntry.get(), self.lNameEntry.get(),self.dobEntry.get(),
-                                         self.phoneEntry.get(), self.emailEntry.get(), self.historyEntry.get(),
-                                         self.doctorEntry.get(), self.dateofentryEntry.get())
+                                         self.phoneEntry.get(), self.emailEntry.get(), self.dateof_admitEntry.get(),
+                                         self.doctorEntry.get())
         if (self.test == "SUCCESS"):
             self.database.Insert(self.idEntry.get(), self.fNameEntry.get(), self.lNameEntry.get(), self.dobEntry.get(),
                                  self.mobBox.get(), self.yobBox.get(), self.genderBox.get(), self.addressEntry.get(),
                                  self.phoneEntry.get(), self.emailEntry.get(), self.bloodGroupBox.get(),
-                                 self.historyEntry.get(), self.doctorEntry.get(),self.dateofentryEntry.get() )
+                                 self.dateof_admitEntry.get(), self.doctorEntry.get())
             tkinter.messagebox.showinfo("Inserted data", "Successfully inserted the above data in the database")
         else:
             self.valueErrorMessage = "Invalid input kindly check field ->" + self.test
@@ -185,9 +183,9 @@ class InsertWindow:
         self.phoneEntry.delete(0, tkinter.END)
         self.emailEntry.delete(0, tkinter.END)
         self.bloodGroupBox.set("")
-        self.historyEntry.delete(0, tkinter.END)
+        self.dateof_admitEntry.delete(0, tkinter.END)
         self.doctorEntry.delete(0, tkinter.END)
-        self.dateofentryEntry.delete(0, tkinter.END)
+
 
 
 class UpdateWindow:
@@ -204,7 +202,7 @@ class UpdateWindow:
         self.address = tkinter.StringVar()
         self.phone = tkinter.StringVar()
         self.email = tkinter.StringVar()
-        self.history = tkinter.StringVar()
+        self.dateof_admit = tkinter.StringVar()
         self.doctor = tkinter.StringVar()
 
         self.genderList = ["Male", "Female", "Transgender", "Other"]
@@ -229,7 +227,7 @@ class UpdateWindow:
         tkinter.Label(self.window, text="Phone Number", width=25).grid(pady=5, column=1, row=9)
         tkinter.Label(self.window, text="Email ID", width=25).grid(pady=5, column=1, row=10)
         tkinter.Label(self.window, text="Blood Group", width=25).grid(pady=5, column=1, row=11)
-        tkinter.Label(self.window, text="Patient History", width=25).grid(pady=5, column=1, row=12)
+        tkinter.Label(self.window, text="Date of Admit", width=25).grid(pady=5, column=1, row=12)
         tkinter.Label(self.window, text="Doctor", width=25).grid(pady=5, column=1, row=13)
 
         # Set previous values
@@ -258,7 +256,7 @@ class UpdateWindow:
         self.addressEntry = tkinter.Entry(self.window, width=25, textvariable=self.address)
         self.phoneEntry = tkinter.Entry(self.window, width=25, textvariable=self.phone)
         self.emailEntry = tkinter.Entry(self.window, width=25, textvariable=self.email)
-        self.historyEntry = tkinter.Entry(self.window, width=25, textvariable=self.history)
+        self.dateof_admitEntry = tkinter.Entry(self.window, width=25, textvariable=self.dateof_admit)
         self.doctorEntry = tkinter.Entry(self.window, width=25, textvariable=self.doctor)
 
         self.fNameEntry.grid(pady=5, column=3, row=2)
@@ -267,7 +265,7 @@ class UpdateWindow:
         self.addressEntry.grid(pady=5, column=3, row=8)
         self.phoneEntry.grid(pady=5, column=3, row=9)
         self.emailEntry.grid(pady=5, column=3, row=10)
-        self.historyEntry.grid(pady=5, column=3, row=12)
+        self.dateof_admitEntry.grid(pady=5, column=3, row=12)
         self.doctorEntry.grid(pady=5, column=3, row=13)
 
         # Combobox widgets
@@ -296,7 +294,7 @@ class UpdateWindow:
         self.database = Database()
         self.database.Update(self.fNameEntry.get(), self.lNameEntry.get(), self.dobEntry.get(), self.mobBox.get(),
                              self.yobBox.get(), self.genderBox.get(), self.addressEntry.get(), self.phoneEntry.get(),
-                             self.emailEntry.get(), self.bloodGroupBox.get(), self.historyEntry.get(),
+                             self.emailEntry.get(), self.bloodGroupBox.get(), self.dateof_admitEntry.get(),
                              self.doctorEntry.get(), self.id)
         tkinter.messagebox.showinfo("Updated data", "Successfully updated the above data in the database")
 
@@ -311,7 +309,7 @@ class UpdateWindow:
         self.phoneEntry.delete(0, tkinter.END)
         self.emailEntry.delete(0, tkinter.END)
         self.bloodGroupBox.set("")
-        self.historyEntry.delete(0, tkinter.END)
+        self.dateof_admitEntry.delete(0, tkinter.END)
         self.doctorEntry.delete(0, tkinter.END)
 
 
@@ -329,7 +327,7 @@ class DatabaseView:
         self.databaseView["show"] = "headings"
         self.databaseView["columns"] = (
         "id", "fName", "lName", "dob", "symptoms", "yob", "gender", "address", "phone", "email", "bloodGroup",
-        "history", "doctor", "dateofentry")
+        "dateof_admit", "doctor")
 
         # Treeview column headings
         self.databaseView.heading("id", text="ID")
@@ -343,9 +341,9 @@ class DatabaseView:
         self.databaseView.heading("phone", text="Phone Number")
         self.databaseView.heading("email", text="Email ID")
         self.databaseView.heading("bloodGroup", text="Blood Group")
-        self.databaseView.heading("history", text="History")
+        self.databaseView.heading("dateof_admit", text="Date of Admit")
         self.databaseView.heading("doctor", text="Doctor")
-        self.databaseView.heading("dateofentry", text="Date of Entry")
+
 
         # Treeview columns
         self.databaseView.column("id", width=40)
@@ -359,9 +357,9 @@ class DatabaseView:
         self.databaseView.column("phone", width=100)
         self.databaseView.column("email", width=200)
         self.databaseView.column("bloodGroup", width=100)
-        self.databaseView.column("history", width=100)
+        self.databaseView.column("dateof_admit", width=100)
         self.databaseView.column("doctor", width=100)
-        self.databaseView.column("dateofentry", width=60)
+
 
         for record in data:
             self.databaseView.insert('', 'end', values=(record))
@@ -409,11 +407,13 @@ class HomePage:
     def __init__(self):
         self.homePageWindow = tkinter.Tk()
         self.homePageWindow.wm_title("DIGITAL QUARANTINE REGISTER (DQAR)")
+        root = tkinter.Tk()
+        frame1 = tkinter.Frame(root)
+        frame1.pack(side=tkinter.TOP, fill=tkinter.X)
+        photo1 = tkinter.PhotoImage(file="covid1.gif")
 
-
-
-
-
+        image1 = Image.open("covid1.gif")
+        photo1 = ImageTk.PhotoImage(image1)
 
 
 
@@ -438,7 +438,7 @@ class HomePage:
         #self.canvas.pack()
         #self.photo = PhotoImage(file='covid.png')
         #self.canvas.create_image(-20, -20, image=self.photo, anchor=NW)
-       
+
 
     def Update(self):
         self.updateIDWindow = tkinter.Tk()
