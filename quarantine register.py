@@ -40,7 +40,7 @@ class Database:
 
 class Values:
     def Validate(self, id, fName, lName, phone, email, history, doctor):
-        if not (id.isdigit() and (len(id) == 3)):
+        if not (id.isdigit() and (len(id) == 9)):
             return "id"
         elif not (fName.isalpha()):
             return "fName"
