@@ -294,7 +294,7 @@ class UpdateWindow:
 
     def Update(self):
         self.database = Database()
-        self.database.Update(self.fNameEntry.get(), self.lNameEntry.get(), self.dobBox.get(), self.mobBox.get(),
+        self.database.Update(self.fNameEntry.get(), self.lNameEntry.get(), self.dobEntry.get(), self.mobBox.get(),
                              self.yobBox.get(), self.genderBox.get(), self.addressEntry.get(), self.phoneEntry.get(),
                              self.emailEntry.get(), self.bloodGroupBox.get(), self.historyEntry.get(),
                              self.doctorEntry.get(), self.id)
