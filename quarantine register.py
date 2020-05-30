@@ -1,4 +1,5 @@
 
+
 import tkinter
 import tkinter.ttk
 import tkinter.messagebox
@@ -9,19 +10,19 @@ class Database:
     def __init__(self):
         self.dbConnection = sqlite3.connect("dbFile.db")
         self.dbCursor = self.dbConnection.cursor()
-        self.dbCursor.execute("CREATE TABLE IF NOT EXISTS patient_info (id PRIMARYKEY text, fName text, lName text, dob text, mob text, yob text, gender text, address text, phone text, email text, bloodGroup text, history text, doctor text)")
+        self.dbCursor.execute("CREATE TABLE IF NOT EXISTS patient_info (id PRIMARYKEY text, fName text, lName text, dob text, symptoms text, yob text, gender text, address text, phone text, email text, bloodGroup text, history text, doctor text)")
 
 
     def __del__(self):
         self.dbCursor.close()
         self.dbConnection.close()
 
-    def Insert(self, id, fName, lName, dob, mob, yob, gender, address, phone, email, bloodGroup, history, doctor):
-        self.dbCursor.execute("INSERT INTO patient_info VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (id, fName, lName, dob, mob, yob, gender, address, phone, email, bloodGroup, history, doctor))
+    def Insert(self, id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor):
+        self.dbCursor.execute("INSERT INTO patient_info VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (id, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor))
         self.dbConnection.commit()
         
-    def Update(self, fName, lName, dob, mob, yob, gender, address, phone, email, bloodGroup, history, doctor, id):
-        self.dbCursor.execute("UPDATE patient_info SET fName = ?, lName = ?, dob = ?, mob = ?, yob = ?, gender = ?, address = ?, phone = ?, email = ?, bloodGroup = ?, history = ?, doctor = ? WHERE id = ?", (fName, lName, dob, mob, yob, gender, address, phone, email, bloodGroup, history, doctor, id))
+    def Update(self, fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor, id):
+        self.dbCursor.execute("UPDATE patient_info SET fName = ?, lName = ?, dob = ?, symptoms = ?, yob = ?, gender = ?, address = ?, phone = ?, email = ?, bloodGroup = ?, history = ?, doctor = ? WHERE id = ?", (fName, lName, dob, symptoms, yob, gender, address, phone, email, bloodGroup, history, doctor, id))
         self.dbConnection.commit()
         
     def Search(self, id):
@@ -76,7 +77,7 @@ class InsertWindow:
 
         self.genderList = ["Male", "Female", "Transgender", "Other"]
         self.dateList = list(range(1, 32))
-        self.monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        self.SymptomsList = ["Dry Cough", "Fever", "Chest Pain", "Difficulty breathing or shortness of breath", "Tiredness", "Chest pain or pressure", "Loss of speech or movement", "A rash on skin, or discolouration of fingers or toes", "Loss of taste or smell", "Conjunctivitis", "Sore throat", "Aches and pains"]
         self.yearList = list(range(1900, 2020))
         self.bloodGroupList = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
 
@@ -85,7 +86,7 @@ class InsertWindow:
         tkinter.Label(self.window, text = "First Name",  width = 25).grid(pady = 5, column = 1, row = 2)
         tkinter.Label(self.window, text = "Last Name",  width = 25).grid(pady = 5, column = 1, row = 3)
         tkinter.Label(self.window, text = "D.O.B",  width = 25).grid(pady = 5, column = 1, row = 4)
-        tkinter.Label(self.window, text = "M.O.B",  width = 25).grid(pady = 5, column = 1, row = 5)
+        tkinter.Label(self.window, text = "Symptoms",  width = 25).grid(pady = 5, column = 1, row = 5)
         tkinter.Label(self.window, text = "Y.O.B",  width = 25).grid(pady = 5, column = 1, row = 6)
         tkinter.Label(self.window, text = "Gender",  width = 25).grid(pady = 5, column = 1, row = 7)
         tkinter.Label(self.window, text = "Home Address",  width = 25).grid(pady = 5, column = 1, row = 8)
@@ -120,7 +121,7 @@ class InsertWindow:
 
         # Combobox widgets
         self.dobBox = tkinter.ttk.Combobox(self.window, values = self.dateList, width = 20)
-        self.mobBox = tkinter.ttk.Combobox(self.window, values = self.monthList, width = 20)
+        self.mobBox = tkinter.ttk.Combobox(self.window, values = self.SymptomsList, width = 20)
         self.yobBox = tkinter.ttk.Combobox(self.window, values = self.yearList, width = 20)
         self.genderBox = tkinter.ttk.Combobox(self.window, values = self.genderList, width = 20)
         self.bloodGroupBox = tkinter.ttk.Combobox(self.window, values = self.bloodGroupList, width = 20)
@@ -183,7 +184,7 @@ class UpdateWindow:
 
         self.genderList = ["Male", "Female", "Transgender", "Other"]
         self.dateList = list(range(1, 32))
-        self.monthList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        self.SymptomsList = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         self.yearList = list(range(1900, 2020))
         self.bloodGroupList = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
 
@@ -193,7 +194,7 @@ class UpdateWindow:
         tkinter.Label(self.window, text = "First Name",  width = 25).grid(pady = 5, column = 1, row = 2)
         tkinter.Label(self.window, text = "Last Name",  width = 25).grid(pady = 5, column = 1, row = 3)
         tkinter.Label(self.window, text = "D.O.B",  width = 25).grid(pady = 5, column = 1, row = 4)
-        tkinter.Label(self.window, text = "M.O.B",  width = 25).grid(pady = 5, column = 1, row = 5)
+        tkinter.Label(self.window, text = "Symptoms",  width = 25).grid(pady = 5, column = 1, row = 5)
         tkinter.Label(self.window, text = "Y.O.B",  width = 25).grid(pady = 5, column = 1, row = 6)
         tkinter.Label(self.window, text = "Gender",  width = 25).grid(pady = 5, column = 1, row = 7)
         tkinter.Label(self.window, text = "Home Address",  width = 25).grid(pady = 5, column = 1, row = 8)
@@ -240,7 +241,7 @@ class UpdateWindow:
 
         # Combobox widgets
         self.dobBox = tkinter.ttk.Combobox(self.window, values = self.dateList, width = 20)
-        self.mobBox = tkinter.ttk.Combobox(self.window, values = self.monthList, width = 20)
+        self.mobBox = tkinter.ttk.Combobox(self.window, values = self.SymptomsList, width = 20)
         self.yobBox = tkinter.ttk.Combobox(self.window, values = self.yearList, width = 20)
         self.genderBox = tkinter.ttk.Combobox(self.window, values = self.genderList, width = 20)
         self.bloodGroupBox = tkinter.ttk.Combobox(self.window, values = self.bloodGroupList, width = 20)
@@ -288,14 +289,14 @@ class DatabaseView:
         self.databaseView = tkinter.ttk.Treeview(self.databaseViewWindow)
         self.databaseView.grid(pady = 5, column = 1, row = 2)
         self.databaseView["show"] = "headings"
-        self.databaseView["columns"] = ("id", "fName", "lName", "dob", "mob", "yob", "gender", "address", "phone", "email", "bloodGroup", "history", "doctor","Date of Entry")
+        self.databaseView["columns"] = ("id", "fName", "lName", "dob", "symptoms", "yob", "gender", "address", "phone", "email", "bloodGroup", "history", "doctor","Date of Entry")
 
         # Treeview column headings
         self.databaseView.heading("id", text = "ID")
         self.databaseView.heading("fName", text = "First Name")
         self.databaseView.heading("lName", text = "Last Name")
         self.databaseView.heading("dob", text = "D.O.B")
-        self.databaseView.heading("mob", text = "M.O.B")
+        self.databaseView.heading("symptoms", text = "Symptoms")
         self.databaseView.heading("yob", text = "Y.O.B")
         self.databaseView.heading("gender", text = "Gender")
         self.databaseView.heading("address", text = "Home Address")
@@ -311,7 +312,7 @@ class DatabaseView:
         self.databaseView.column("fName", width = 100)
         self.databaseView.column("lName", width = 100)
         self.databaseView.column("dob", width = 60)
-        self.databaseView.column("mob", width = 60)
+        self.databaseView.column("symptoms", width = 60)
         self.databaseView.column("yob", width = 60)
         self.databaseView.column("gender", width = 60)
         self.databaseView.column("address", width = 200)
